@@ -12,7 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
 
 import javax.mail.MessagingException;
@@ -52,7 +51,7 @@ public class EmailServiceImpl implements EmailService {
 
         /* Create HTML using Thymeleaf template Engine */
 
-        Context context = new Context();
+        WebContext context = new WebContext(request, response, servletContext);
         context.setVariable("orderEntry", order);
         String orderHtml = templateEngine.process("order", context);
 

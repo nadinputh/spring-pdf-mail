@@ -11,6 +11,7 @@
 <body class="flex items-center justify-center h-screen">
 <div class="rounded-lg border shadow-lg p-10 w-3/5">
     <div class="flex flex-row justify-between pb-4">
+        <h2 th:text="#{greeting}"></h2>
         <div>
             <h2 class="text-xl font-bold">Order #<span style="color: green" class="text-green-600" th:text="${orderEntry.orderId}"></span>
             </h2>

@@ -33,7 +33,7 @@ public class PDFController {
     public String getOrderPage(Model model) {
         Order order = OrderHelper.getOrder();
         model.addAttribute("orderEntry", order);
-        return "order";
+        return "invoice";
     }
 
     @RequestMapping(path = "/pdf")
@@ -45,9 +45,9 @@ public class PDFController {
 
         /* Create HTML using Thymeleaf template Engine */
 
-        WebContext context = new WebContext(request, response, servletContext);
+        WebContext context = new WebContext(request, response, servletContext, request.getLocale());
         context.setVariable("orderEntry", order);
-        String orderHtml = templateEngine.process("order", context);
+        String orderHtml = templateEngine.process("invoice", context);
 
         /* Setup Source and target I/O streams */
 
@@ -56,6 +56,7 @@ public class PDFController {
         /*Setup converter properties. */
         ConverterProperties converterProperties = new ConverterProperties();
         converterProperties.setBaseUri("http://localhost:8080");
+        converterProperties.setCharset("UTF-8");
 
         /* Call convert method */
         HtmlConverter.convertToPdf(orderHtml, target, converterProperties);

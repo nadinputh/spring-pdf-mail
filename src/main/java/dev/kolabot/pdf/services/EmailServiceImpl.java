@@ -3,6 +3,7 @@ package dev.kolabot.pdf.services;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.io.source.ByteArrayOutputStream;
+import com.itextpdf.layout.font.FontProvider;
 import dev.kolabot.pdf.OrderHelper;
 import dev.kolabot.pdf.pojo.Order;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +52,9 @@ public class EmailServiceImpl implements EmailService {
         Order order = OrderHelper.getOrder();
 
         /* Create HTML using Thymeleaf template Engine */
+        Locale locale = new Locale("km");
 
-        WebContext context = new WebContext(request, response, servletContext);
+        WebContext context = new WebContext(request, response, servletContext, locale);
         context.setVariable("orderEntry", order);
         String orderHtml = templateEngine.process("order", context);
 
@@ -62,6 +65,14 @@ public class EmailServiceImpl implements EmailService {
         /*Setup converter properties. */
         ConverterProperties converterProperties = new ConverterProperties();
         converterProperties.setBaseUri("http://localhost:8080");
+        converterProperties.setCharset("UTF-8");
+
+//        FontProvider fontProvider = new FontProvider();
+//        fontProvider.addFont("static/font/Battambang-Regular.ttf");
+//        fontProvider.addStandardPdfFonts();
+//        fontProvider.addSystemFonts();
+
+//        converterProperties.setFontProvider(fontProvider);
 
         /* Call convert method */
         HtmlConverter.convertToPdf(orderHtml, target, converterProperties);
